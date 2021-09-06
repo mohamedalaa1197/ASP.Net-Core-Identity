@@ -52,3 +52,4 @@ D:\Identity Course\IdentityCourse\IdentityExample\obj\Debug\netcoreapp3.1\Identi
 D:\Identity Course\IdentityCourse\IdentityExample\obj\Debug\netcoreapp3.1\IdentityExample.dll
 D:\Identity Course\IdentityCourse\IdentityExample\obj\Debug\netcoreapp3.1\IdentityExample.pdb
 D:\Identity Course\IdentityCourse\IdentityExample\obj\Debug\netcoreapp3.1\IdentityExample.genruntimeconfig.cache
+D:\Identity Course\IdentityCourse\IdentityExample\obj\Debug\netcoreapp3.1\Razor\Views\Home\Secrete.cshtml.g.cs

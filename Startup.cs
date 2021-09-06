@@ -1,4 +1,6 @@
+using IdentityExample.AuthorizationPolicy;
 using IdentityExample.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace IdentityExample
@@ -24,6 +27,34 @@ namespace IdentityExample
             //        config.LoginPath = "/Home/Authenticate";
             //        config.Cookie.Name = "GrandMa.Cookie";
             //    });
+
+            
+            services.AddAuthorization(config =>
+            {
+                //This is how the Default Policy is Built
+
+                //var policyBuilder = new AuthorizationPolicyBuilder();
+                //var defaultPolicy = policyBuilder
+                //.RequireAuthenticatedUser()
+                //.RequireClaim(ClaimTypes.Email)
+                //.Build();
+
+                //config.DefaultPolicy = defaultPolicy;
+
+                config.AddPolicy("Alaa.Policy", policyBuilder =>
+                {
+                    policyBuilder.AddRequirements(new CustomeRequirmentClaims(ClaimTypes.Name));
+                });
+
+
+                config.AddPolicy("Admin", policyBuilder => {
+                    policyBuilder.RequireClaim(ClaimTypes.Role, "Admin");
+                });
+
+            });
+
+            services.AddScoped<IAuthorizationRequirement, CustomeRequirmentClaims>();
+
 
             services.AddControllersWithViews();
 
