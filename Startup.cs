@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -41,8 +42,10 @@ namespace IdentityExample
 
                 //config.DefaultPolicy = defaultPolicy;
 
+                //Creating Our Own Policy
                 config.AddPolicy("Alaa.Policy", policyBuilder =>
                 {
+                    //To add Policy We need Requirments and to add requirments we need handlers
                     policyBuilder.AddRequirements(new CustomeRequirmentClaims(ClaimTypes.Name));
                 });
 
@@ -56,7 +59,16 @@ namespace IdentityExample
             services.AddScoped<IAuthorizationRequirement, CustomeRequirmentClaims>();
 
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(config=>
+            {
+                var builder = new AuthorizationPolicyBuilder();
+                var defaultPolicy = builder
+                                     .RequireAuthenticatedUser()
+                                     .Build();
+
+                //Adding Global Authorization for the project
+                config.Filters.Add(new AuthorizeFilter(defaultPolicy));
+            });
 
             //Use The In Memory DB To Store User Data
             services.AddDbContext<ApplicationDBContext>(config =>

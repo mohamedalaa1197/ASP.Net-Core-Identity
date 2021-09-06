@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -90,6 +91,30 @@ namespace IdentityExample.Controllers
         public IActionResult Register()
         {
             return View();
+        }
+
+
+        //Authorization inside the Function 
+        public async Task<IActionResult> DoStuff(
+           [FromServices] IAuthorizationService authorizationService
+            )
+        {
+
+            var builder = new AuthorizationPolicyBuilder();
+            var defaultPolicy = builder
+                                .RequireClaim("Hello")
+                                .Build();
+
+            var authResult = await authorizationService.AuthorizeAsync(User, defaultPolicy);
+            if (authResult.Succeeded)
+            {
+                return View("Index");
+            }
+
+            return View("Index");
+
+
+
         }
     }
 }
